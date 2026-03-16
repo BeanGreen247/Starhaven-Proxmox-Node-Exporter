@@ -559,61 +559,57 @@ class StarheavenExporter:
 
     @timed(timeout=15)
     def collect_vms(self):
-        """Collect QEMU VM and LXC container metrics via qm/pct."""
+        """Collect QEMU VM and LXC container metrics via pvesh JSON API."""
         if not (self.features['qemu_vms'] or self.features['lxc_containers']):
             return
         _t0 = time.time()
-        if True:
-            counts: dict = defaultdict(lambda: defaultdict(int))
 
-            feature_key = {'qemu': 'qemu_vms', 'lxc': 'lxc_containers'}
-            for vm_type, cmd in [('qemu', 'qm'), ('lxc', 'pct')]:
-                if not self.features.get(feature_key[vm_type]):
-                    continue
-                result = subprocess.run([cmd, 'list'], capture_output=True, text=True, timeout=5)
-                if result.returncode != 0:
-                    continue
-                for line in result.stdout.strip().splitlines()[1:]:  # skip header
-                    cols = line.split()
-                    if not cols:
-                        continue
-                    vmid   = cols[0]
-                    name   = cols[1] if len(cols) > 1 else vmid
-                    status = cols[2] if len(cols) > 2 else 'unknown'
-                    counts[vm_type][status] += 1
-                    self.vm_status.labels(vmid=vmid, name=name, type=vm_type).set(
-                        1 if status == 'running' else 0)
+        counts: dict = defaultdict(lambda: defaultdict(int))
+        node = self.hostname  # e.g. 'starhaven'
 
-                    # Detailed stats for running VMs
-                    if status == 'running':
-                        try:
-                            stat_result = subprocess.run(
-                                [cmd, 'status', vmid, '--verbose'],
-                                capture_output=True, text=True, timeout=3)
-                            cpu_pct = uptime = mem_used = mem_max = 0
-                            for sline in stat_result.stdout.splitlines():
-                                kv = sline.split(':', 1)
-                                if len(kv) != 2:
-                                    continue
-                                k, v = kv[0].strip().lower(), kv[1].strip()
-                                if 'cpu' in k and '%' in v:
-                                    cpu_pct = float(v.rstrip('%'))
-                                elif 'uptime' in k:
-                                    uptime = int(v.split()[0]) if v.split() else 0
-                                elif k in ('mem', 'memory') and '/' in v:
-                                    mem_parts = v.split('/')
-                                    mem_used = self._parse_mem(mem_parts[0])
-                                    mem_max  = self._parse_mem(mem_parts[1])
-                            self.vm_cpu.labels(vmid=vmid, name=name, type=vm_type).set(cpu_pct)
-                            self.vm_uptime.labels(vmid=vmid, name=name, type=vm_type).set(uptime)
-                            self.vm_mem.labels(vmid=vmid, name=name, type=vm_type).set(mem_used)
-                            self.vm_maxmem.labels(vmid=vmid, name=name, type=vm_type).set(mem_max)
-                        except Exception:
-                            pass
+        api_types = []
+        if self.features['qemu_vms']:
+            api_types.append(('qemu', 'qemu'))
+        if self.features['lxc_containers']:
+            api_types.append(('lxc', 'lxc'))
 
-            for vm_type, statuses in counts.items():
-                for status, count in statuses.items():
-                    self.vm_count.labels(type=vm_type, status=status).set(count)
+        for vm_type, api_path in api_types:
+            # List all VMs/CTs
+            list_result = subprocess.run(
+                ['pvesh', 'get', f'/nodes/{node}/{api_path}',
+                 '--output-format', 'json'],
+                capture_output=True, text=True, timeout=5)
+            if list_result.returncode != 0:
+                continue
+            try:
+                vms = json.loads(list_result.stdout)
+            except Exception:
+                continue
+
+            for vm in vms:
+                vmid   = str(vm.get('vmid', ''))
+                name   = str(vm.get('name', vmid))
+                status = vm.get('status', 'unknown')
+                counts[vm_type][status] += 1
+                self.vm_status.labels(vmid=vmid, name=name, type=vm_type).set(
+                    1 if status == 'running' else 0)
+
+                # pvesh list already includes cpu/mem/uptime for running VMs
+                cpu_ratio = float(vm.get('cpu', 0) or 0)   # 0.0–1.0
+                cpu_pct   = cpu_ratio * 100.0
+                mem_used  = int(vm.get('mem',    0) or 0)
+                mem_max   = int(vm.get('maxmem', 0) or 0)
+                uptime    = int(vm.get('uptime', 0) or 0)
+
+                self.vm_cpu.labels(vmid=vmid, name=name, type=vm_type).set(cpu_pct)
+                self.vm_uptime.labels(vmid=vmid, name=name, type=vm_type).set(uptime)
+                self.vm_mem.labels(vmid=vmid, name=name, type=vm_type).set(mem_used)
+                self.vm_maxmem.labels(vmid=vmid, name=name, type=vm_type).set(mem_max)
+
+        for vm_type, statuses in counts.items():
+            for status, count in statuses.items():
+                self.vm_count.labels(type=vm_type, status=status).set(count)
+
         self.collection_duration.labels(collector='vms').set(time.time() - _t0)
         self.collection_success.labels(collector='vms').set(1)
 
