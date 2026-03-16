@@ -2516,6 +2516,19 @@
           "legendFormat": "{{name}} ({{type}})",
           "range": true,
           "refId": "mem"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "af3392sviamtcf"
+          },
+          "editorMode": "code",
+          "expr": "node_memory_MemTotal_bytes{instance=\"192.168.0.222:9100\"}/4",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "maxSysRam/4",
+          "range": true,
+          "refId": "A"
         }
       ],
       "title": "Per-VM RAM Usage",
@@ -3349,5 +3362,5 @@
   "timezone": "",
   "title": "Proxmox - Starhaven Homelab",
   "uid": "starhaven-pve-2026",
-  "version": 85
+  "version": 87
 }
