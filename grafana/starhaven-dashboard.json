@@ -1,0 +1,3460 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "$$hashKey": "object:215",
+        "builtIn": 1,
+        "datasource": {
+          "type": "datasource",
+          "uid": "grafana"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "limit": 100,
+        "name": "Annotations & Alerts",
+        "showIn": 0,
+        "target": {
+          "limit": 100,
+          "matchAny": false,
+          "tags": [],
+          "type": "dashboard"
+        },
+        "type": "dashboard"
+      }
+    ]
+  },
+  "description": "Homelab starhaven based on Proxmox Virtual Environment Dashboard",
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "links": [],
+  "liveNow": true,
+  "panels": [
+    {
+      "collapsed": false,
+      "gridPos": {
+        "x": 0,
+        "y": 0,
+        "h": 1,
+        "w": 24
+      },
+      "id": 29,
+      "panels": [],
+      "title": "Host",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "af3392sviamtcf"
+      },
+      "description": "1, 5, and 15 minute system load averages",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 2,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "yellow",
+                "value": 4
+              },
+              {
+                "color": "orange",
+                "value": 8
+              },
+              {
+                "color": "red",
+                "value": 12
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 1,
+        "h": 4,
+        "w": 8
+      },
+      "id": 31,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "value_and_name",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.3.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "af3392sviamtcf"
+          },
+          "editorMode": "code",
+          "expr": "node_load1{instance=\"192.168.0.222:9100\"}",
+          "instant": true,
+          "legendFormat": "1m",
+          "range": false,
+          "refId": "l1"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "af3392sviamtcf"
+          },
+          "editorMode": "code",
+          "expr": "node_load5{instance=\"192.168.0.222:9100\"}",
+          "instant": true,
+          "legendFormat": "5m",
+          "range": false,
+          "refId": "l5"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "af3392sviamtcf"
+          },
+          "editorMode": "code",
+          "expr": "node_load15{instance=\"192.168.0.222:9100\"}",
+          "instant": true,
+          "legendFormat": "15m",
+          "range": false,
+          "refId": "l15"
+        }
+      ],
+      "title": "Load Average",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "af3392sviamtcf"
+      },
+      "description": "Swap space used vs total",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "percentage",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "yellow",
+                "value": 30
+              },
+              {
+                "color": "red",
+                "value": 70
+              }
+            ]
+          },
+          "unit": "bytes"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Value #total"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Swap Total"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "text",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Value #used"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Swap Used"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "x": 8,
+        "y": 1,
+        "h": 4,
+        "w": 8
+      },
+      "id": 32,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "value_and_name",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.3.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "af3392sviamtcf"
+          },
+          "editorMode": "code",
+          "expr": "node_memory_SwapTotal_bytes{instance=\"192.168.0.222:9100\"} - node_memory_SwapFree_bytes{instance=\"192.168.0.222:9100\"}",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "__auto",
+          "range": false,
+          "refId": "used"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "af3392sviamtcf"
+          },
+          "editorMode": "code",
+          "expr": "node_memory_SwapTotal_bytes{instance=\"192.168.0.222:9100\"}",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "__auto",
+          "range": false,
+          "refId": "total"
+        }
+      ],
+      "title": "Swap",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "af3392sviamtcf"
+      },
+      "description": "Time since last boot",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "text",
+            "mode": "fixed"
+          },
+          "decimals": 0,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "x": 16,
+        "y": 1,
+        "h": 4,
+        "w": 8
+      },
+      "id": 33,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "vertical",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "value_and_name",
+        "wideLayout": false
+      },
+      "pluginVersion": "12.3.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "af3392sviamtcf"
+          },
+          "editorMode": "code",
+          "expr": "floor((time() - node_boot_time_seconds{instance=\"192.168.0.222:9100\"})/2592000)",
+          "instant": true,
+          "legendFormat": "Month(s)",
+          "range": false,
+          "refId": "mo"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "af3392sviamtcf"
+          },
+          "editorMode": "code",
+          "expr": "floor((time() - node_boot_time_seconds{instance=\"192.168.0.222:9100\"} - floor((time() - node_boot_time_seconds{instance=\"192.168.0.222:9100\"})/2592000)*2592000)/604800)",
+          "instant": true,
+          "legendFormat": "Week(s)",
+          "range": false,
+          "refId": "wk"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "af3392sviamtcf"
+          },
+          "editorMode": "code",
+          "expr": "floor(((time() - node_boot_time_seconds{instance=\"192.168.0.222:9100\"} - floor((time() - node_boot_time_seconds{instance=\"192.168.0.222:9100\"})/2592000)*2592000) - floor(((time() - node_boot_time_seconds{instance=\"192.168.0.222:9100\"} - floor((time() - node_boot_time_seconds{instance=\"192.168.0.222:9100\"})/2592000)*2592000))/604800)*604800)/86400)",
+          "instant": true,
+          "legendFormat": "Day(s)",
+          "range": false,
+          "refId": "d"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "af3392sviamtcf"
+          },
+          "editorMode": "code",
+          "expr": "floor((((time() - node_boot_time_seconds{instance=\"192.168.0.222:9100\"} - floor((time() - node_boot_time_seconds{instance=\"192.168.0.222:9100\"})/2592000)*2592000) - floor(((time() - node_boot_time_seconds{instance=\"192.168.0.222:9100\"} - floor((time() - node_boot_time_seconds{instance=\"192.168.0.222:9100\"})/2592000)*2592000))/604800)*604800) - floor((((time() - node_boot_time_seconds{instance=\"192.168.0.222:9100\"} - floor((time() - node_boot_time_seconds{instance=\"192.168.0.222:9100\"})/2592000)*2592000) - floor(((time() - node_boot_time_seconds{instance=\"192.168.0.222:9100\"} - floor((time() - node_boot_time_seconds{instance=\"192.168.0.222:9100\"})/2592000)*2592000))/604800)*604800))/86400)*86400)/3600)",
+          "instant": true,
+          "legendFormat": "Hour(s)",
+          "range": false,
+          "refId": "h"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "af3392sviamtcf"
+          },
+          "editorMode": "code",
+          "expr": "floor(((((time() - node_boot_time_seconds{instance=\"192.168.0.222:9100\"} - floor((time() - node_boot_time_seconds{instance=\"192.168.0.222:9100\"})/2592000)*2592000) - floor(((time() - node_boot_time_seconds{instance=\"192.168.0.222:9100\"} - floor((time() - node_boot_time_seconds{instance=\"192.168.0.222:9100\"})/2592000)*2592000))/604800)*604800) - floor((((time() - node_boot_time_seconds{instance=\"192.168.0.222:9100\"} - floor((time() - node_boot_time_seconds{instance=\"192.168.0.222:9100\"})/2592000)*2592000) - floor(((time() - node_boot_time_seconds{instance=\"192.168.0.222:9100\"} - floor((time() - node_boot_time_seconds{instance=\"192.168.0.222:9100\"})/2592000)*2592000))/604800)*604800))/86400)*86400) - floor(((((time() - node_boot_time_seconds{instance=\"192.168.0.222:9100\"} - floor((time() - node_boot_time_seconds{instance=\"192.168.0.222:9100\"})/2592000)*2592000) - floor(((time() - node_boot_time_seconds{instance=\"192.168.0.222:9100\"} - floor((time() - node_boot_time_seconds{instance=\"192.168.0.222:9100\"})/2592000)*2592000))/604800)*604800) - floor((((time() - node_boot_time_seconds{instance=\"192.168.0.222:9100\"} - floor((time() - node_boot_time_seconds{instance=\"192.168.0.222:9100\"})/2592000)*2592000) - floor(((time() - node_boot_time_seconds{instance=\"192.168.0.222:9100\"} - floor((time() - node_boot_time_seconds{instance=\"192.168.0.222:9100\"})/2592000)*2592000))/604800)*604800))/86400)*86400))/3600)*3600)/60)",
+          "instant": true,
+          "legendFormat": "Minute(s)",
+          "range": false,
+          "refId": "mi"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "af3392sviamtcf"
+          },
+          "editorMode": "code",
+          "expr": "floor((((((time() - node_boot_time_seconds{instance=\"192.168.0.222:9100\"} - floor((time() - node_boot_time_seconds{instance=\"192.168.0.222:9100\"})/2592000)*2592000) - floor(((time() - node_boot_time_seconds{instance=\"192.168.0.222:9100\"} - floor((time() - node_boot_time_seconds{instance=\"192.168.0.222:9100\"})/2592000)*2592000))/604800)*604800) - floor((((time() - node_boot_time_seconds{instance=\"192.168.0.222:9100\"} - floor((time() - node_boot_time_seconds{instance=\"192.168.0.222:9100\"})/2592000)*2592000) - floor(((time() - node_boot_time_seconds{instance=\"192.168.0.222:9100\"} - floor((time() - node_boot_time_seconds{instance=\"192.168.0.222:9100\"})/2592000)*2592000))/604800)*604800))/86400)*86400) - floor(((((time() - node_boot_time_seconds{instance=\"192.168.0.222:9100\"} - floor((time() - node_boot_time_seconds{instance=\"192.168.0.222:9100\"})/2592000)*2592000) - floor(((time() - node_boot_time_seconds{instance=\"192.168.0.222:9100\"} - floor((time() - node_boot_time_seconds{instance=\"192.168.0.222:9100\"})/2592000)*2592000))/604800)*604800) - floor((((time() - node_boot_time_seconds{instance=\"192.168.0.222:9100\"} - floor((time() - node_boot_time_seconds{instance=\"192.168.0.222:9100\"})/2592000)*2592000) - floor(((time() - node_boot_time_seconds{instance=\"192.168.0.222:9100\"} - floor((time() - node_boot_time_seconds{instance=\"192.168.0.222:9100\"})/2592000)*2592000))/604800)*604800))/86400)*86400))/3600)*3600) - floor((((((time() - node_boot_time_seconds{instance=\"192.168.0.222:9100\"} - floor((time() - node_boot_time_seconds{instance=\"192.168.0.222:9100\"})/2592000)*2592000) - floor(((time() - node_boot_time_seconds{instance=\"192.168.0.222:9100\"} - floor((time() - node_boot_time_seconds{instance=\"192.168.0.222:9100\"})/2592000)*2592000))/604800)*604800) - floor((((time() - node_boot_time_seconds{instance=\"192.168.0.222:9100\"} - floor((time() - node_boot_time_seconds{instance=\"192.168.0.222:9100\"})/2592000)*2592000) - floor(((time() - node_boot_time_seconds{instance=\"192.168.0.222:9100\"} - floor((time() - node_boot_time_seconds{instance=\"192.168.0.222:9100\"})/2592000)*2592000))/604800)*604800))/86400)*86400) - floor(((((time() - node_boot_time_seconds{instance=\"192.168.0.222:9100\"} - floor((time() - node_boot_time_seconds{instance=\"192.168.0.222:9100\"})/2592000)*2592000) - floor(((time() - node_boot_time_seconds{instance=\"192.168.0.222:9100\"} - floor((time() - node_boot_time_seconds{instance=\"192.168.0.222:9100\"})/2592000)*2592000))/604800)*604800) - floor((((time() - node_boot_time_seconds{instance=\"192.168.0.222:9100\"} - floor((time() - node_boot_time_seconds{instance=\"192.168.0.222:9100\"})/2592000)*2592000) - floor(((time() - node_boot_time_seconds{instance=\"192.168.0.222:9100\"} - floor((time() - node_boot_time_seconds{instance=\"192.168.0.222:9100\"})/2592000)*2592000))/604800)*604800))/86400)*86400))/3600)*3600))/60)*60))",
+          "instant": true,
+          "legendFormat": "Second(s)",
+          "range": false,
+          "refId": "s"
+        }
+      ],
+      "title": "System Uptime",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "af3392sviamtcf"
+      },
+      "description": "ZFS ARC current size, target size (c), and maximum allowed size (c_max)",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "showValues": false,
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "bytes"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "ARC Max"
+            },
+            "properties": [
+              {
+                "id": "custom.lineStyle",
+                "value": {
+                  "dash": [
+                    10,
+                    10
+                  ],
+                  "fill": "dash"
+                }
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "red",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "ARC Target"
+            },
+            "properties": [
+              {
+                "id": "custom.lineStyle",
+                "value": {
+                  "dash": [
+                    4,
+                    4
+                  ],
+                  "fill": "dash"
+                }
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "orange",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 5,
+        "h": 9,
+        "w": 12
+      },
+      "id": 34,
+      "options": {
+        "legend": {
+          "calcs": [
+            "max",
+            "mean",
+            "lastNotNull"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "pluginVersion": "12.3.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "af3392sviamtcf"
+          },
+          "editorMode": "code",
+          "expr": "node_zfs_arc_size{instance=\"192.168.0.222:9100\"}",
+          "legendFormat": "ARC Size",
+          "range": true,
+          "refId": "size"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "af3392sviamtcf"
+          },
+          "editorMode": "code",
+          "expr": "node_zfs_arc_c{instance=\"192.168.0.222:9100\"}",
+          "legendFormat": "ARC Target",
+          "range": true,
+          "refId": "target"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "af3392sviamtcf"
+          },
+          "editorMode": "code",
+          "expr": "node_zfs_arc_c_max{instance=\"192.168.0.222:9100\"}",
+          "legendFormat": "ARC Max",
+          "range": true,
+          "refId": "max"
+        }
+      ],
+      "title": "ZFS ARC Size History",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "af3392sviamtcf"
+      },
+      "description": "ZFS ARC cache hit rate (demand data + metadata hits vs total lookups)",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "green",
+            "mode": "fixed"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "showValues": false,
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "area"
+            }
+          },
+          "decimals": 1,
+          "mappings": [],
+          "max": 1,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": 0
+              },
+              {
+                "color": "orange",
+                "value": 0.7
+              },
+              {
+                "color": "green",
+                "value": 0.9
+              }
+            ]
+          },
+          "unit": "percentunit"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 5,
+        "h": 9,
+        "w": 12
+      },
+      "id": 35,
+      "options": {
+        "legend": {
+          "calcs": [
+            "min",
+            "mean",
+            "lastNotNull"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "12.3.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "af3392sviamtcf"
+          },
+          "editorMode": "code",
+          "expr": "rate(node_zfs_arc_hits{instance=\"192.168.0.222:9100\"}[5m]) / (rate(node_zfs_arc_hits{instance=\"192.168.0.222:9100\"}[5m]) + rate(node_zfs_arc_misses{instance=\"192.168.0.222:9100\"}[5m]))",
+          "legendFormat": "ARC Hit Rate",
+          "range": true,
+          "refId": "hitrate"
+        }
+      ],
+      "title": "ZFS ARC Hit Rate",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "af3392sviamtcf"
+      },
+      "description": "Overall host CPU utilisation across all 6 cores",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 15,
+            "gradientMode": "opacity",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "showValues": false,
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "decimals": 1,
+          "mappings": [],
+          "max": 1,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "orange",
+                "value": 0.7
+              },
+              {
+                "color": "red",
+                "value": 0.9
+              }
+            ]
+          },
+          "unit": "percentunit"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 14,
+        "h": 9,
+        "w": 12
+      },
+      "id": 36,
+      "options": {
+        "legend": {
+          "calcs": [
+            "max",
+            "mean",
+            "lastNotNull"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "pluginVersion": "12.3.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "af3392sviamtcf"
+          },
+          "editorMode": "code",
+          "expr": "1 - avg(rate(node_cpu_seconds_total{instance=\"192.168.0.222:9100\",mode=\"idle\"}[5m]))",
+          "legendFormat": "CPU Total",
+          "range": true,
+          "refId": "total"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "af3392sviamtcf"
+          },
+          "editorMode": "code",
+          "expr": "avg by (mode) (rate(node_cpu_seconds_total{instance=\"192.168.0.222:9100\",mode=~\"system|user|iowait|softirq\"}[5m]))",
+          "legendFormat": "{{mode}}",
+          "range": true,
+          "refId": "by_mode"
+        }
+      ],
+      "title": "Host CPU Usage",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "af3392sviamtcf"
+      },
+      "description": "Physical host RAM: used, buffers+cache, and available \u2014 out of total",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "showValues": false,
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "area"
+            }
+          },
+          "decimals": 1,
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "percentage",
+            "steps": [
+              {
+                "color": "transparent",
+                "value": 0
+              },
+              {
+                "color": "orange",
+                "value": 60
+              },
+              {
+                "color": "red",
+                "value": 85
+              }
+            ]
+          },
+          "unit": "bytes"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Total"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "text",
+                  "mode": "fixed"
+                }
+              },
+              {
+                "id": "custom.lineStyle",
+                "value": {
+                  "dash": [
+                    10,
+                    10
+                  ],
+                  "fill": "dash"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 14,
+        "h": 9,
+        "w": 12
+      },
+      "id": 37,
+      "options": {
+        "legend": {
+          "calcs": [
+            "max",
+            "mean",
+            "lastNotNull"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "pluginVersion": "12.3.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "af3392sviamtcf"
+          },
+          "editorMode": "code",
+          "expr": "node_memory_MemTotal_bytes{instance=\"192.168.0.222:9100\"} - node_memory_MemAvailable_bytes{instance=\"192.168.0.222:9100\"}",
+          "hide": false,
+          "legendFormat": "Used",
+          "range": true,
+          "refId": "used"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "af3392sviamtcf"
+          },
+          "editorMode": "code",
+          "expr": "node_memory_Buffers_bytes{instance=\"192.168.0.222:9100\"} + node_memory_Cached_bytes{instance=\"192.168.0.222:9100\"}",
+          "legendFormat": "Buffers + Cache",
+          "range": true,
+          "refId": "cache"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "af3392sviamtcf"
+          },
+          "editorMode": "code",
+          "expr": "node_zfs_arc_size{instance=\"192.168.0.222:9100\"}",
+          "legendFormat": "ZFS ARC",
+          "range": true,
+          "refId": "zfs_arc"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "af3392sviamtcf"
+          },
+          "editorMode": "code",
+          "expr": "node_memory_MemTotal_bytes{instance=\"192.168.0.222:9100\"}",
+          "legendFormat": "Total",
+          "range": true,
+          "refId": "total"
+        }
+      ],
+      "title": "Host RAM Usage",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "af3392sviamtcf"
+      },
+      "description": "Physical disk throughput: nvme0n1 (Crucial P1 1TB), sda (WD 1TB HDD), sdb (WD 8TB HDD). ZFS virtual disks excluded.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "showValues": false,
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "decimals": 0,
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "Bps"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 23,
+        "h": 9,
+        "w": 12
+      },
+      "id": 38,
+      "options": {
+        "legend": {
+          "calcs": [
+            "max",
+            "mean",
+            "lastNotNull"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "pluginVersion": "12.3.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "af3392sviamtcf"
+          },
+          "editorMode": "code",
+          "expr": "rate(node_disk_read_bytes_total{instance=\"192.168.0.222:9100\",device=~\"nvme0n1|sda|sdb\"}[5m])",
+          "legendFormat": "{{device}} Read",
+          "range": true,
+          "refId": "reads"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "af3392sviamtcf"
+          },
+          "editorMode": "code",
+          "expr": "rate(node_disk_written_bytes_total{instance=\"192.168.0.222:9100\",device=~\"nvme0n1|sda|sdb\"}[5m])",
+          "legendFormat": "{{device}} Write",
+          "range": true,
+          "refId": "writes"
+        }
+      ],
+      "title": "Host Disk I/O (Physical Disks)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "af3392sviamtcf"
+      },
+      "description": "Network traffic on physical NIC (eno1), bridge (vmbr0), and Tailscale (tailscale0)",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "showValues": false,
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "decimals": 0,
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "Bps"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 23,
+        "h": 9,
+        "w": 12
+      },
+      "id": 39,
+      "options": {
+        "legend": {
+          "calcs": [
+            "max",
+            "mean",
+            "lastNotNull"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "pluginVersion": "12.3.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "af3392sviamtcf"
+          },
+          "editorMode": "code",
+          "expr": "rate(node_network_receive_bytes_total{instance=\"192.168.0.222:9100\",device=~\"eno1|vmbr0|tailscale0\"}[5m])",
+          "legendFormat": "{{device}} RX",
+          "range": true,
+          "refId": "rx"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "af3392sviamtcf"
+          },
+          "editorMode": "code",
+          "expr": "rate(node_network_transmit_bytes_total{instance=\"192.168.0.222:9100\",device=~\"eno1|vmbr0|tailscale0\"}[5m])",
+          "legendFormat": "{{device}} TX",
+          "range": true,
+          "refId": "tx"
+        }
+      ],
+      "title": "Host Network I/O",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "af3392sviamtcf"
+      },
+      "description": "Disk capacity for all storage: / (NVMe pve-root), /mnt/bckpHDD (sda1 backup HDD), ZFS pool vm-8tb-hdd0 (full 7.3TB pool including all VM zvols), and LXC container subvolumes. Data from proxmox-node-exporter on port 9101.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "filterable": false,
+            "footer": {
+              "reducers": []
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "yellow",
+                "value": 0.7
+              },
+              {
+                "color": "orange",
+                "value": 0.85
+              },
+              {
+                "color": "red",
+                "value": 0.95
+              }
+            ]
+          },
+          "unit": "bytes"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Mountpoint"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 260
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Device"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 260
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Type"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 60
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Used %"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "percentunit"
+              },
+              {
+                "id": "custom.width",
+                "value": 140
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "mode": "gradient",
+                  "type": "color-background"
+                }
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": 0
+                    },
+                    {
+                      "color": "yellow",
+                      "value": 0.7
+                    },
+                    {
+                      "color": "orange",
+                      "value": 0.85
+                    },
+                    {
+                      "color": "red",
+                      "value": 0.95
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Used"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "bytes"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 32,
+        "h": 8,
+        "w": 24
+      },
+      "id": 40,
+      "options": {
+        "cellHeight": "sm",
+        "frameIndex": 0,
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": false,
+            "displayName": "Mountpoint"
+          }
+        ]
+      },
+      "pluginVersion": "12.3.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "af3392sviamtcf"
+          },
+          "editorMode": "code",
+          "expr": "node_filesystem_size_bytes{instance=\"192.168.0.222:9101\",fstype!~\"tmpfs|fuse.*|squashfs|vfat\",mountpoint!~\"/boot/efi|/opt/proxmox-exporter|/var/tmp|/vm-8tb-hdd0\"} or label_replace(label_replace(label_replace(node_zfs_zpool_size_bytes{instance=\"192.168.0.222:9101\",pool=\"vm-8tb-hdd0\"}, \"mountpoint\", \"/vm-8tb-hdd0 (ZFS pool)\", \"\", \"\"), \"device\", \"sdb (ZFS: vm-8tb-hdd0)\", \"\", \"\"), \"fstype\", \"zfs-pool\", \"\", \"\")",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "",
+          "range": false,
+          "refId": "total"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "af3392sviamtcf"
+          },
+          "editorMode": "code",
+          "expr": "node_filesystem_free_bytes{instance=\"192.168.0.222:9101\",fstype!~\"tmpfs|fuse.*|squashfs|vfat\",mountpoint!~\"/boot/efi|/opt/proxmox-exporter|/var/tmp|/vm-8tb-hdd0\"} or label_replace(label_replace(label_replace(node_zfs_zpool_free_bytes{instance=\"192.168.0.222:9101\",pool=\"vm-8tb-hdd0\"}, \"mountpoint\", \"/vm-8tb-hdd0 (ZFS pool)\", \"\", \"\"), \"device\", \"sdb (ZFS: vm-8tb-hdd0)\", \"\", \"\"), \"fstype\", \"zfs-pool\", \"\", \"\")",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "",
+          "range": false,
+          "refId": "avail"
+        }
+      ],
+      "title": "Disk Capacity",
+      "transformations": [
+        {
+          "id": "joinByField",
+          "options": {
+            "byField": "mountpoint",
+            "mode": "outer"
+          }
+        },
+        {
+          "id": "calculateField",
+          "options": {
+            "alias": "Used",
+            "binary": {
+              "left": "Value #total",
+              "operator": "-",
+              "right": "Value #avail"
+            },
+            "mode": "binary",
+            "reduce": {
+              "reducer": "sum"
+            }
+          }
+        },
+        {
+          "id": "calculateField",
+          "options": {
+            "alias": "Used %",
+            "binary": {
+              "left": "Used",
+              "operator": "/",
+              "right": "Value #total"
+            },
+            "mode": "binary",
+            "reduce": {
+              "reducer": "sum"
+            }
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time 1": true,
+              "Time 2": true,
+              "__name__ 1": true,
+              "__name__ 2": true,
+              "device 2": true,
+              "device_error 1": true,
+              "device_error 2": true,
+              "fstype 2": true,
+              "instance 1": true,
+              "instance 2": true,
+              "job 1": true,
+              "job 2": true,
+              "pool 1": true,
+              "pool 2": true
+            },
+            "indexByName": {
+              "Used": 4,
+              "Used %": 6,
+              "Value #avail": 5,
+              "Value #total": 3,
+              "device 1": 1,
+              "fstype 1": 2,
+              "mountpoint": 0
+            },
+            "renameByName": {
+              "Used": "Used",
+              "Used %": "Used %",
+              "Value #avail": "Available",
+              "Value #total": "Total",
+              "device 1": "Device",
+              "fstype 1": "Type",
+              "mountpoint": "Mountpoint"
+            }
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "id": 54,
+      "type": "row",
+      "title": "Temperatures",
+      "collapsed": false,
+      "panels": [],
+      "gridPos": {
+        "x": 0,
+        "y": 40,
+        "h": 1,
+        "w": 24
+      }
+    },
+    {
+      "id": 30,
+      "type": "stat",
+      "title": "Temperatures",
+      "description": "Current temperatures \u2014 CPU package & cores, NVMe, Dell SMM, PCH",
+      "pluginVersion": "12.3.2",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "af3392sviamtcf"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 41,
+        "h": 5,
+        "w": 24
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "unit": "celsius",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 60
+              },
+              {
+                "color": "orange",
+                "value": 80
+              },
+              {
+                "color": "red",
+                "value": 95
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "horizontal",
+        "textMode": "value_and_name",
+        "wideLayout": true,
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "percentChangeColorMode": "standard"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "af3392sviamtcf"
+          },
+          "editorMode": "code",
+          "instant": true,
+          "range": false,
+          "expr": "node_hwmon_temp_celsius{instance=\"192.168.0.222:9100\",chip=\"platform_coretemp_0\",sensor=\"temp1\"}",
+          "legendFormat": "CPU Package",
+          "refId": "cpu_pkg"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "af3392sviamtcf"
+          },
+          "editorMode": "code",
+          "instant": true,
+          "range": false,
+          "expr": "node_hwmon_temp_celsius{instance=\"192.168.0.222:9100\",chip=\"platform_coretemp_0\",sensor=~\"temp[2-7]\"} * on(chip,sensor) group_left(label) node_hwmon_sensor_label{instance=\"192.168.0.222:9100\",chip=\"platform_coretemp_0\"}",
+          "legendFormat": "{{label}}",
+          "refId": "cpu_cores"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "af3392sviamtcf"
+          },
+          "editorMode": "code",
+          "instant": true,
+          "range": false,
+          "expr": "node_hwmon_temp_celsius{instance=\"192.168.0.222:9100\",chip=\"nvme_nvme0\",sensor=\"temp1\"}",
+          "legendFormat": "NVMe Composite",
+          "refId": "nvme"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "af3392sviamtcf"
+          },
+          "editorMode": "code",
+          "instant": true,
+          "range": false,
+          "expr": "node_hwmon_temp_celsius{instance=\"192.168.0.222:9100\",chip=\"platform_dell_smm_hwmon\"}",
+          "legendFormat": "Dell SMM {{sensor}}",
+          "refId": "dell"
+        }
+      ]
+    },
+    {
+      "id": 55,
+      "type": "timeseries",
+      "title": "CPU Temperatures \u2014 History",
+      "description": "CPU package and per-core temperature over time",
+      "pluginVersion": "12.3.2",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "af3392sviamtcf"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 46,
+        "h": 9,
+        "w": 12
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "unit": "celsius",
+          "custom": {
+            "lineWidth": 1,
+            "fillOpacity": 10,
+            "showPoints": "never",
+            "spanNulls": false
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 60
+              },
+              {
+                "color": "orange",
+                "value": 80
+              },
+              {
+                "color": "red",
+                "value": 95
+              }
+            ]
+          },
+          "min": 0
+        },
+        "overrides": []
+      },
+      "options": {
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        },
+        "legend": {
+          "displayMode": "table",
+          "placement": "bottom",
+          "calcs": [
+            "lastNotNull",
+            "max"
+          ]
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "af3392sviamtcf"
+          },
+          "editorMode": "code",
+          "instant": false,
+          "range": true,
+          "expr": "node_hwmon_temp_celsius{instance=\"192.168.0.222:9100\",chip=\"platform_coretemp_0\",sensor=\"temp1\"}",
+          "legendFormat": "CPU Package",
+          "refId": "pkg"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "af3392sviamtcf"
+          },
+          "editorMode": "code",
+          "instant": false,
+          "range": true,
+          "expr": "node_hwmon_temp_celsius{instance=\"192.168.0.222:9100\",chip=\"platform_coretemp_0\",sensor=~\"temp[2-7]\"} * on(chip,sensor) group_left(label) node_hwmon_sensor_label{instance=\"192.168.0.222:9100\",chip=\"platform_coretemp_0\"}",
+          "legendFormat": "{{label}}",
+          "refId": "cores"
+        }
+      ]
+    },
+    {
+      "id": 56,
+      "type": "timeseries",
+      "title": "Storage & Board Temperatures \u2014 History",
+      "description": "NVMe, Dell SMM, and PCH temperatures over time",
+      "pluginVersion": "12.3.2",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "af3392sviamtcf"
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 46,
+        "h": 9,
+        "w": 12
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "unit": "celsius",
+          "custom": {
+            "lineWidth": 1,
+            "fillOpacity": 10,
+            "showPoints": "never",
+            "spanNulls": false
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 55
+              },
+              {
+                "color": "orange",
+                "value": 70
+              },
+              {
+                "color": "red",
+                "value": 85
+              }
+            ]
+          },
+          "min": 0
+        },
+        "overrides": []
+      },
+      "options": {
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        },
+        "legend": {
+          "displayMode": "table",
+          "placement": "bottom",
+          "calcs": [
+            "lastNotNull",
+            "max"
+          ]
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "af3392sviamtcf"
+          },
+          "editorMode": "code",
+          "instant": false,
+          "range": true,
+          "expr": "node_hwmon_temp_celsius{instance=\"192.168.0.222:9100\",chip=\"nvme_nvme0\",sensor=\"temp1\"}",
+          "legendFormat": "NVMe Composite",
+          "refId": "nvme"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "af3392sviamtcf"
+          },
+          "editorMode": "code",
+          "instant": false,
+          "range": true,
+          "expr": "node_hwmon_temp_celsius{instance=\"192.168.0.222:9100\",chip=\"nvme_nvme0\",sensor=~\"temp[23]\"} * on(chip,sensor) group_left(label) node_hwmon_sensor_label{instance=\"192.168.0.222:9100\",chip=\"nvme_nvme0\"}",
+          "legendFormat": "NVMe {{label}}",
+          "refId": "nvme_sensors"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "af3392sviamtcf"
+          },
+          "editorMode": "code",
+          "instant": false,
+          "range": true,
+          "expr": "node_hwmon_temp_celsius{instance=\"192.168.0.222:9100\",chip=\"platform_dell_smm_hwmon\"}",
+          "legendFormat": "Dell SMM {{sensor}}",
+          "refId": "dell"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "af3392sviamtcf"
+          },
+          "editorMode": "code",
+          "instant": false,
+          "range": true,
+          "expr": "node_hwmon_temp_celsius{instance=\"192.168.0.222:9100\",chip=\"thermal_thermal_zone1\",sensor=\"temp0\"}",
+          "legendFormat": "PCH",
+          "refId": "pch"
+        }
+      ]
+    },
+    {
+      "collapsed": true,
+      "gridPos": {
+        "x": 0,
+        "y": 55,
+        "h": 1,
+        "w": 24
+      },
+      "id": 50,
+      "panels": [
+        {
+          "id": 57,
+          "type": "barchart",
+          "title": "Virtual Disk \u2014 Allocated vs Used per VM",
+          "description": "Allocated = thin-provisioned volsize. Used = physically written to ZFS pool.",
+          "pluginVersion": "12.3.2",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "af3392sviamtcf"
+          },
+          "gridPos": {
+            "x": 0,
+            "y": 1,
+            "h": 10,
+            "w": 24
+          },
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "unit": "bytes",
+              "custom": {
+                "fillOpacity": 80,
+                "gradientMode": "none",
+                "lineWidth": 1,
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                }
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  }
+                ]
+              }
+            },
+            "overrides": [
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Allocated"
+                },
+                "properties": [
+                  {
+                    "id": "color",
+                    "value": {
+                      "fixedColor": "blue",
+                      "mode": "fixed"
+                    }
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Used"
+                },
+                "properties": [
+                  {
+                    "id": "color",
+                    "value": {
+                      "fixedColor": "orange",
+                      "mode": "fixed"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          "options": {
+            "barWidth": 0.6,
+            "groupWidth": 0.7,
+            "xTickLabelRotation": -30,
+            "xTickLabelSpacing": 0,
+            "stacking": "none",
+            "fillOpacity": 80,
+            "gradientMode": "none",
+            "legend": {
+              "displayMode": "list",
+              "placement": "bottom",
+              "showLegend": true
+            },
+            "tooltip": {
+              "mode": "multi",
+              "sort": "desc"
+            },
+            "xField": "vmid",
+            "colorByField": "series"
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "af3392sviamtcf"
+              },
+              "editorMode": "code",
+              "instant": true,
+              "range": false,
+              "expr": "sum by (vmid) (pve_disk_volsize_bytes{instance=\"192.168.0.222:9101\"})",
+              "legendFormat": "Allocated",
+              "refId": "alloc"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "af3392sviamtcf"
+              },
+              "editorMode": "code",
+              "instant": true,
+              "range": false,
+              "expr": "sum by (vmid) (pve_disk_used_bytes{instance=\"192.168.0.222:9101\"})",
+              "legendFormat": "Used",
+              "refId": "used"
+            }
+          ],
+          "transformations": [
+            {
+              "id": "joinByLabels",
+              "options": {
+                "join": [
+                  "vmid"
+                ]
+              }
+            },
+            {
+              "id": "sortBy",
+              "options": {
+                "fields": [
+                  {
+                    "displayName": "vmid",
+                    "desc": false
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "id": 58,
+          "type": "stat",
+          "title": "ZFS Pool \u2014 vm-8tb-hdd0 Physical Space",
+          "description": "Pool total, physically allocated (written), and free. Not thin-provisioned.",
+          "pluginVersion": "12.3.2",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "af3392sviamtcf"
+          },
+          "gridPos": {
+            "x": 0,
+            "y": 11,
+            "h": 4,
+            "w": 24
+          },
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "unit": "bytes",
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  }
+                ]
+              },
+              "custom": {}
+            },
+            "overrides": [
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Free"
+                },
+                "properties": [
+                  {
+                    "id": "thresholds",
+                    "value": {
+                      "mode": "absolute",
+                      "steps": [
+                        {
+                          "color": "red",
+                          "value": null
+                        },
+                        {
+                          "color": "yellow",
+                          "value": 500000000000
+                        },
+                        {
+                          "color": "green",
+                          "value": 1000000000000
+                        }
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Allocated"
+                },
+                "properties": [
+                  {
+                    "id": "color",
+                    "value": {
+                      "fixedColor": "orange",
+                      "mode": "fixed"
+                    }
+                  },
+                  {
+                    "id": "custom.displayMode",
+                    "value": "basic"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Sum of Allocated"
+                },
+                "properties": [
+                  {
+                    "id": "color",
+                    "value": {
+                      "fixedColor": "purple",
+                      "mode": "fixed"
+                    }
+                  },
+                  {
+                    "id": "mappings",
+                    "value": []
+                  },
+                  {
+                    "id": "custom",
+                    "value": {}
+                  }
+                ]
+              }
+            ]
+          },
+          "options": {
+            "colorMode": "background",
+            "graphMode": "none",
+            "justifyMode": "auto",
+            "orientation": "horizontal",
+            "textMode": "value_and_name",
+            "wideLayout": true,
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": false
+            },
+            "showPercentChange": false,
+            "percentChangeColorMode": "standard"
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "af3392sviamtcf"
+              },
+              "editorMode": "code",
+              "instant": true,
+              "range": false,
+              "expr": "node_zfs_zpool_size_bytes{instance=\"192.168.0.222:9101\",pool=\"vm-8tb-hdd0\"}",
+              "legendFormat": "Pool Size",
+              "refId": "size"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "af3392sviamtcf"
+              },
+              "editorMode": "code",
+              "instant": true,
+              "range": false,
+              "expr": "node_zfs_zpool_allocated_bytes{instance=\"192.168.0.222:9101\",pool=\"vm-8tb-hdd0\"}",
+              "legendFormat": "Physically Written",
+              "refId": "phys"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "af3392sviamtcf"
+              },
+              "editorMode": "code",
+              "instant": true,
+              "range": false,
+              "expr": "node_zfs_zpool_free_bytes{instance=\"192.168.0.222:9101\",pool=\"vm-8tb-hdd0\"}",
+              "legendFormat": "Free",
+              "refId": "free"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "af3392sviamtcf"
+              },
+              "editorMode": "code",
+              "instant": true,
+              "range": false,
+              "expr": "sum(pve_disk_volsize_bytes{instance=\"192.168.0.222:9101\"})",
+              "legendFormat": "Total Thin-Provisioned",
+              "refId": "thin"
+            }
+          ]
+        },
+        {
+          "id": 59,
+          "type": "table",
+          "title": "Virtual Disk Detail",
+          "description": "Per-disk breakdown: allocated volsize, physically used, and free per VM/LXC",
+          "pluginVersion": "12.3.2",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "af3392sviamtcf"
+          },
+          "gridPos": {
+            "x": 0,
+            "y": 15,
+            "h": 10,
+            "w": 24
+          },
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "unit": "bytes",
+              "custom": {
+                "align": "auto",
+                "cellOptions": {
+                  "type": "auto"
+                },
+                "filterable": true
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  }
+                ]
+              }
+            },
+            "overrides": [
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "VMID"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 70
+                  },
+                  {
+                    "id": "unit",
+                    "value": "short"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Disk"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 90
+                  },
+                  {
+                    "id": "unit",
+                    "value": "short"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Pool"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 140
+                  },
+                  {
+                    "id": "unit",
+                    "value": "short"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Type"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 65
+                  },
+                  {
+                    "id": "unit",
+                    "value": "short"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Allocated"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 110
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Used"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 110
+                  },
+                  {
+                    "id": "thresholds",
+                    "value": {
+                      "mode": "percentage",
+                      "steps": [
+                        {
+                          "color": "green",
+                          "value": null
+                        },
+                        {
+                          "color": "yellow",
+                          "value": 60
+                        },
+                        {
+                          "color": "orange",
+                          "value": 80
+                        },
+                        {
+                          "color": "red",
+                          "value": 90
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "id": "custom.cellOptions",
+                    "value": {
+                      "mode": "basic",
+                      "type": "color-background"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          "options": {
+            "cellHeight": "sm",
+            "frameIndex": 0,
+            "showHeader": true,
+            "sortBy": [
+              {
+                "desc": false,
+                "displayName": "VMID"
+              }
+            ]
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "af3392sviamtcf"
+              },
+              "editorMode": "code",
+              "instant": true,
+              "range": false,
+              "format": "table",
+              "expr": "pve_disk_volsize_bytes{instance=\"192.168.0.222:9101\"}",
+              "legendFormat": "",
+              "refId": "volsize"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "af3392sviamtcf"
+              },
+              "editorMode": "code",
+              "instant": true,
+              "range": false,
+              "format": "table",
+              "expr": "pve_disk_used_bytes{instance=\"192.168.0.222:9101\"}",
+              "legendFormat": "",
+              "refId": "disk_used"
+            }
+          ],
+          "transformations": [
+            {
+              "id": "joinByField",
+              "options": {
+                "byField": "vmid",
+                "mode": "outer"
+              }
+            },
+            {
+              "id": "organize",
+              "options": {
+                "excludeByName": {
+                  "Time 1": true,
+                  "Time 2": true,
+                  "__name__ 1": true,
+                  "__name__ 2": true,
+                  "instance 1": true,
+                  "instance 2": true,
+                  "job 1": true,
+                  "job 2": true,
+                  "disk 2": true,
+                  "pool 2": true,
+                  "type 2": true
+                },
+                "renameByName": {
+                  "vmid": "VMID",
+                  "disk 1": "Disk",
+                  "pool 1": "Pool",
+                  "type 1": "Type",
+                  "Value #volsize": "Allocated",
+                  "Value #disk_used": "Used"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "af3392sviamtcf"
+          },
+          "description": "Per-VM / LXC CPU usage (QEMU + LXC)",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisBorderShow": false,
+                "axisCenteredZero": false,
+                "axisColorMode": "text",
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "barWidthFactor": 0.6,
+                "drawStyle": "line",
+                "fillOpacity": 10,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "insertNulls": false,
+                "lineInterpolation": "linear",
+                "lineWidth": 2,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "never",
+                "showValues": false,
+                "spanNulls": true,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "decimals": 2,
+              "mappings": [],
+              "max": 1,
+              "min": 0,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": 0
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              },
+              "unit": "percentunit"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "x": 0,
+            "y": 25,
+            "h": 9,
+            "w": 12
+          },
+          "id": 43,
+          "options": {
+            "legend": {
+              "calcs": [
+                "max",
+                "mean",
+                "lastNotNull"
+              ],
+              "displayMode": "table",
+              "placement": "bottom",
+              "showLegend": true
+            },
+            "tooltip": {
+              "hideZeros": false,
+              "mode": "multi",
+              "sort": "desc"
+            }
+          },
+          "pluginVersion": "12.3.2",
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "af3392sviamtcf"
+              },
+              "editorMode": "code",
+              "expr": "avg by (name,type) (pve_vm_cpu_usage_percent)",
+              "legendFormat": "{{name}} ({{type}})",
+              "range": true,
+              "refId": "qemu_cpu"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "af3392sviamtcf"
+              },
+              "editorMode": "code",
+              "expr": "avg by (name,type) (pve_vm_cpu_usage_percent)",
+              "legendFormat": "{{name}} ({{type}})",
+              "range": true,
+              "refId": "lxc_cpu"
+            }
+          ],
+          "title": "Per-VM CPU Usage",
+          "type": "timeseries"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "af3392sviamtcf"
+          },
+          "description": "Per-VM / LXC RAM usage",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisBorderShow": false,
+                "axisCenteredZero": false,
+                "axisColorMode": "text",
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "barWidthFactor": 0.6,
+                "drawStyle": "line",
+                "fillOpacity": 10,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "insertNulls": false,
+                "lineInterpolation": "linear",
+                "lineWidth": 2,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "never",
+                "showValues": false,
+                "spanNulls": true,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "decimals": 0,
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": 0
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              },
+              "unit": "bytes"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "x": 12,
+            "y": 25,
+            "h": 9,
+            "w": 12
+          },
+          "id": 44,
+          "options": {
+            "legend": {
+              "calcs": [
+                "max",
+                "mean",
+                "lastNotNull"
+              ],
+              "displayMode": "table",
+              "placement": "bottom",
+              "showLegend": true
+            },
+            "tooltip": {
+              "hideZeros": false,
+              "mode": "multi",
+              "sort": "desc"
+            }
+          },
+          "pluginVersion": "12.3.2",
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "af3392sviamtcf"
+              },
+              "editorMode": "code",
+              "expr": "pve_qemu_memory_bytes{instance=\"$instance\"}",
+              "legendFormat": "QEMU {{name}}",
+              "range": true,
+              "refId": "qemu_mem"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "af3392sviamtcf"
+              },
+              "editorMode": "code",
+              "expr": "pve_lxc_memory_bytes{instance=\"$instance\"}",
+              "legendFormat": "LXC {{name}}",
+              "range": true,
+              "refId": "lxc_mem"
+            }
+          ],
+          "title": "Per-VM RAM Usage",
+          "type": "timeseries"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "af3392sviamtcf"
+          },
+          "description": "Per-VM / LXC network in/out (bytes/sec)",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisBorderShow": false,
+                "axisCenteredZero": false,
+                "axisColorMode": "text",
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "barWidthFactor": 0.6,
+                "drawStyle": "line",
+                "fillOpacity": 0,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "insertNulls": false,
+                "lineInterpolation": "linear",
+                "lineWidth": 2,
+                "pointSize": 3,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "never",
+                "showValues": false,
+                "spanNulls": true,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "decimals": 0,
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": 0
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              },
+              "unit": "Bps"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "x": 0,
+            "y": 34,
+            "h": 9,
+            "w": 24
+          },
+          "id": 45,
+          "options": {
+            "legend": {
+              "calcs": [
+                "max",
+                "mean",
+                "lastNotNull"
+              ],
+              "displayMode": "table",
+              "placement": "bottom",
+              "showLegend": true
+            },
+            "tooltip": {
+              "hideZeros": false,
+              "mode": "multi",
+              "sort": "desc"
+            }
+          },
+          "pluginVersion": "12.3.2",
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "af3392sviamtcf"
+              },
+              "editorMode": "code",
+              "expr": "rate(pve_qemu_net_rx_bytes_total{instance=\"$instance\"}[5m])",
+              "legendFormat": "QEMU {{name}} RX",
+              "range": true,
+              "refId": "qemu_rx"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "af3392sviamtcf"
+              },
+              "editorMode": "code",
+              "expr": "rate(pve_qemu_net_tx_bytes_total{instance=\"$instance\"}[5m])",
+              "legendFormat": "QEMU {{name}} TX",
+              "range": true,
+              "refId": "qemu_tx"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "af3392sviamtcf"
+              },
+              "editorMode": "code",
+              "expr": "rate(pve_lxc_net_rx_bytes_total{instance=\"$instance\"}[5m])",
+              "legendFormat": "LXC {{name}} RX",
+              "range": true,
+              "refId": "lxc_rx"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "af3392sviamtcf"
+              },
+              "editorMode": "code",
+              "expr": "rate(pve_lxc_net_tx_bytes_total{instance=\"$instance\"}[5m])",
+              "legendFormat": "LXC {{name}} TX",
+              "range": true,
+              "refId": "lxc_tx"
+            }
+          ],
+          "title": "Per-VM Network I/O",
+          "type": "timeseries"
+        }
+      ],
+      "title": "VMs",
+      "type": "row"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "x": 0,
+        "y": 56,
+        "h": 1,
+        "w": 24
+      },
+      "id": 51,
+      "panels": [],
+      "title": "Updates",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "af3392sviamtcf"
+      },
+      "description": "APT packages pending upgrade and autoremoval on the Proxmox host",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "options": {
+                "0": {
+                  "color": "green",
+                  "index": 0,
+                  "text": "Up to date"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "yellow",
+                "value": 1
+              },
+              {
+                "color": "orange",
+                "value": 10
+              },
+              {
+                "color": "red",
+                "value": 25
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Autoremove"
+            },
+            "properties": [
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": 0
+                    },
+                    {
+                      "color": "yellow",
+                      "value": 1
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 57,
+        "h": 4,
+        "w": 24
+      },
+      "id": 42,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "value_and_name",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.3.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "af3392sviamtcf"
+          },
+          "editorMode": "code",
+          "expr": "sum(apt_upgrades_pending{instance=\"192.168.0.222:9100\"})",
+          "instant": true,
+          "legendFormat": "Updates",
+          "range": false,
+          "refId": "apt"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "af3392sviamtcf"
+          },
+          "editorMode": "code",
+          "expr": "apt_autoremove_pending{instance=\"192.168.0.222:9100\"}",
+          "instant": true,
+          "legendFormat": "Autoremove",
+          "range": false,
+          "refId": "autoremove"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "af3392sviamtcf"
+          },
+          "editorMode": "code",
+          "expr": "sum(apt_upgrades_pending{instance=\"192.168.0.222:9100\",origin=~\".*security.*\"})",
+          "instant": true,
+          "legendFormat": "Security Updates",
+          "range": false,
+          "refId": "security"
+        }
+      ],
+      "title": "APT Updates",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "af3392sviamtcf"
+      },
+      "description": "All Proxmox VMs and LXC containers \u2014 status, uptime, RAM used/total",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "filterable": true,
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Status"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 90
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "0": {
+                        "color": "red",
+                        "index": 1,
+                        "text": "stopped"
+                      },
+                      "1": {
+                        "color": "green",
+                        "index": 0,
+                        "text": "running"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "mode": "gradient",
+                  "type": "color-background"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Name"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 220
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "VMID"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 70
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Type"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 65
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "RAM Used"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "bytes"
+              },
+              {
+                "id": "custom.width",
+                "value": 110
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "RAM Total"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "bytes"
+              },
+              {
+                "id": "custom.width",
+                "value": 110
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "CPU %"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "percent"
+              },
+              {
+                "id": "custom.width",
+                "value": 80
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green"
+                    },
+                    {
+                      "color": "yellow",
+                      "value": 50
+                    },
+                    {
+                      "color": "red",
+                      "value": 85
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "mode": "basic",
+                  "type": "color-background"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Uptime"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "dtdurations"
+              },
+              {
+                "id": "custom.width",
+                "value": 140
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 61,
+        "h": 10,
+        "w": 24
+      },
+      "id": 52,
+      "options": {
+        "cellHeight": "sm",
+        "frameIndex": 0,
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": false,
+            "displayName": "Name"
+          }
+        ]
+      },
+      "pluginVersion": "12.3.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "af3392sviamtcf"
+          },
+          "editorMode": "code",
+          "expr": "pve_vm_status{instance=\"192.168.0.222:9101\"}",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "",
+          "range": false,
+          "refId": "status"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "af3392sviamtcf"
+          },
+          "editorMode": "code",
+          "expr": "pve_vm_memory_used_bytes{instance=\"192.168.0.222:9101\"}",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "",
+          "range": false,
+          "refId": "mem_used"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "af3392sviamtcf"
+          },
+          "editorMode": "code",
+          "expr": "pve_vm_memory_total_bytes{instance=\"192.168.0.222:9101\"}",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "",
+          "range": false,
+          "refId": "mem_total"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "af3392sviamtcf"
+          },
+          "editorMode": "code",
+          "expr": "pve_vm_cpu_usage_percent{instance=\"192.168.0.222:9101\"}",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "",
+          "range": false,
+          "refId": "cpu"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "af3392sviamtcf"
+          },
+          "editorMode": "code",
+          "expr": "pve_vm_uptime_seconds{instance=\"192.168.0.222:9101\"}",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "",
+          "range": false,
+          "refId": "uptime"
+        }
+      ],
+      "title": "VM / LXC Status",
+      "transformations": [
+        {
+          "id": "joinByField",
+          "options": {
+            "byField": "vmid",
+            "mode": "outer"
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time 1": true,
+              "Time 2": true,
+              "Time 3": true,
+              "Time 4": true,
+              "Time 5": true,
+              "__name__ 1": true,
+              "__name__ 2": true,
+              "__name__ 3": true,
+              "__name__ 4": true,
+              "__name__ 5": true,
+              "instance 1": true,
+              "instance 2": true,
+              "instance 3": true,
+              "instance 4": true,
+              "instance 5": true,
+              "job 1": true,
+              "job 2": true,
+              "job 3": true,
+              "job 4": true,
+              "job 5": true,
+              "name 2": true,
+              "name 3": true,
+              "name 4": true,
+              "name 5": true,
+              "type 2": true,
+              "type 3": true,
+              "type 4": true,
+              "type 5": true
+            },
+            "renameByName": {
+              "Value #cpu": "CPU %",
+              "Value #mem_total": "RAM Total",
+              "Value #mem_used": "RAM Used",
+              "Value #status": "Status",
+              "Value #uptime": "Uptime",
+              "name 1": "Name",
+              "type 1": "Type",
+              "vmid": "VMID"
+            }
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "af3392sviamtcf"
+      },
+      "description": "Key Proxmox systemd units \u2014 1=active, 0=inactive/failed",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "filterable": false
+          },
+          "custom.cellOptions": {
+            "mode": "gradient",
+            "type": "color-background"
+          },
+          "mappings": [
+            {
+              "options": {
+                "0": {
+                  "color": "red",
+                  "index": 1,
+                  "text": "inactive"
+                },
+                "1": {
+                  "color": "green",
+                  "index": 0,
+                  "text": "active"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red"
+              },
+              {
+                "color": "green",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Service"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 300
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "State"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 100
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "mode": "gradient",
+                  "type": "color-background"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 71,
+        "h": 7,
+        "w": 24
+      },
+      "id": 53,
+      "options": {
+        "cellHeight": "sm",
+        "frameIndex": 0,
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": false,
+            "displayName": "Service"
+          }
+        ]
+      },
+      "pluginVersion": "12.3.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "af3392sviamtcf"
+          },
+          "editorMode": "code",
+          "expr": "node_systemd_unit_state{instance=\"192.168.0.222:9100\",name=~\"pve-cluster[.]service|pvedaemon[.]service|pveproxy[.]service|pve-firewall[.]service|pvestatd[.]service|pve-ha-crm[.]service|pve-ha-lrm[.]service|ssh[.]service|cron[.]service|postfix[.]service\",state=\"active\"}",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "",
+          "range": false,
+          "refId": "svc"
+        }
+      ],
+      "title": "Proxmox Service Health",
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true,
+              "__name__": true,
+              "instance": true,
+              "job": true
+            },
+            "renameByName": {
+              "Value": "State",
+              "name": "Service",
+              "state": "Active State"
+            }
+          }
+        }
+      ],
+      "type": "table"
+    }
+  ],
+  "preload": true,
+  "refresh": "10s",
+  "schemaVersion": 42,
+  "tags": [
+    "Proxmox",
+    "Prometheus",
+    "Starhaven"
+  ],
+  "templating": {
+    "list": [
+      {
+        "current": {
+          "text": "",
+          "value": ""
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "af3392sviamtcf"
+        },
+        "definition": "label_values(pve_up, instance)",
+        "description": "Select Proxmox instance",
+        "includeAll": false,
+        "label": "Instance",
+        "name": "instance",
+        "options": [],
+        "query": {
+          "qryType": 1,
+          "query": "label_values(pve_up, instance)",
+          "refId": "PrometheusVariableQueryEditor-VariableQuery"
+        },
+        "refresh": 2,
+        "regex": "",
+        "sort": 1,
+        "type": "query"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-5m",
+    "to": "now"
+  },
+  "timepicker": {
+    "refresh_intervals": [
+      "5s",
+      "10s",
+      "30s",
+      "45s",
+      "1m",
+      "2m",
+      "5m",
+      "10m",
+      "15m",
+      "30m",
+      "45m",
+      "1h",
+      "2h",
+      "3h",
+      "6h",
+      "12h",
+      "1d"
+    ]
+  },
+  "timezone": "",
+  "title": "Proxmox - Starhaven Homelab",
+  "uid": "starhaven-pve-2026",
+  "version": 78
+}
