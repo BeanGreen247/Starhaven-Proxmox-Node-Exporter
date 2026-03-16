@@ -41,8 +41,8 @@ starhaven-homelab/
 
 ```bash
 # On the PVE host (192.168.0.222) as root:
-GITHUB_USER=<your-github-username> bash <(curl -fsSL \
-  https://raw.githubusercontent.com/<your-github-username>/starhaven-homelab/main/install.sh)
+GITHUB_USER=BeanGreen247 bash <(curl -fsSL \
+  https://raw.githubusercontent.com/BeanGreen247/starhaven-homelab/main/install.sh)
 ```
 
 The installer will:

@@ -13,9 +13,9 @@
 set -euo pipefail
 
 # -------- CONFIG --------
-GITHUB_USER="${GITHUB_USER:-BeanGreen247}"
-GITHUB_REPO="${GITHUB_REPO:-starhaven-homelab}"
-GITHUB_BRANCH="${GITHUB_BRANCH:-main}"
+GITHUB_USER="BeanGreen247"
+GITHUB_REPO="starhaven-homelab"
+GITHUB_BRANCH="main"
 
 INSTALL_DIR="/opt/proxmox-exporter"
 PY_SCRIPT="${INSTALL_DIR}/proxmox-node-exporter.py"
