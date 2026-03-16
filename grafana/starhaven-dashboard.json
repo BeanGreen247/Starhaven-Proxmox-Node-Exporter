@@ -2395,21 +2395,10 @@
             "uid": "af3392sviamtcf"
           },
           "editorMode": "code",
-          "expr": "avg by (name,type) (pve_vm_cpu_usage_percent)",
+          "expr": "pve_vm_cpu_usage_percent{instance=\"192.168.0.222:9101\"}",
           "legendFormat": "{{name}} ({{type}})",
           "range": true,
-          "refId": "qemu_cpu"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "af3392sviamtcf"
-          },
-          "editorMode": "code",
-          "expr": "avg by (name,type) (pve_vm_cpu_usage_percent)",
-          "legendFormat": "{{name}} ({{type}})",
-          "range": true,
-          "refId": "lxc_cpu"
+          "refId": "cpu"
         }
       ],
       "title": "Per-VM CPU Usage",
@@ -3362,5 +3351,5 @@
   "timezone": "",
   "title": "Proxmox - Starhaven Homelab",
   "uid": "starhaven-pve-2026",
-  "version": 87
+  "version": 88
 }

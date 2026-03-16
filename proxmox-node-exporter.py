@@ -137,6 +137,10 @@ class StarheavenExporter:
         self.executor  = concurrent.futures.ThreadPoolExecutor(max_workers=MAX_WORKERS) \
                          if PARALLEL_COLLECTORS else None
 
+        # Per-vmid CPU cgroup state: {vmid: (usage_usec, timestamp)}
+        # Used to compute CPU% as a rate between collection cycles.
+        self._cpu_prev: dict = {}
+
         self.features = {
             'sensors':         False,
             'zfs':             False,
@@ -594,11 +598,13 @@ class StarheavenExporter:
                 self.vm_status.labels(vmid=vmid, name=name, type=vm_type).set(
                     1 if status == 'running' else 0)
 
-                # Use /status/current per-VM for accurate cpu (list endpoint
-                # returns instantaneous 0 for idle VMs; status/current gives
-                # the proper Proxmox-averaged value)
-                mem_max = int(vm.get('maxmem', 0) or 0)
-                cpu_pct = mem_used = uptime = 0
+                # ── pvesh /status/current — used for maxmem, uptime, cpus, and QEMU mem.
+                # NOTE: pvesh cpu=0 always outside TTY — use cgroup rate instead.
+                # NOTE: pvesh mem=0 for LXC outside TTY — use cgroup instead.
+                # NOTE: pvesh mem for QEMU = balloon driver (actual guest OS used) — correct.
+                mem_max  = int(vm.get('maxmem', 0) or 0)
+                num_cpus = int(vm.get('cpus',   1) or 1)
+                cpu_pct  = mem_used = uptime = 0
                 try:
                     stat = subprocess.run(
                         ['pvesh', 'get',
@@ -607,21 +613,19 @@ class StarheavenExporter:
                         capture_output=True, text=True, timeout=5)
                     if stat.returncode == 0:
                         s = json.loads(stat.stdout)
-                        cpu_pct  = float(s.get('cpu',    0) or 0) * 100.0
-                        mem_used = int(s.get('mem',      0) or 0)
+                        mem_used = int(s.get('mem',      0) or 0)   # correct for QEMU
                         mem_max  = int(s.get('maxmem', mem_max) or mem_max)
+                        num_cpus = int(s.get('cpus', num_cpus) or num_cpus)
                         uptime   = int(s.get('uptime',   0) or 0)
                 except Exception:
                     pass
 
-                # LXC containers track memory via cgroups on the host — pvesh
-                # may return 0 for mem when the JSON is read outside a TTY context.
-                # Always read cgroup memory directly for LXC; it is the
-                # authoritative value (same as what the Proxmox web UI shows).
+                # ── LXC RAM: pvesh returns 0 outside TTY; read cgroup directly.
+                # QEMU mem from pvesh (balloon driver) is the correct guest-used value.
                 if vm_type == 'lxc' and status == 'running':
                     cg_paths = [
-                        f'/sys/fs/cgroup/lxc/{vmid}/memory.current',          # PVE 8 cgroup v2
-                        f'/sys/fs/cgroup/memory/lxc/{vmid}/memory.usage_in_bytes',  # PVE 7 cgroup v1
+                        f'/sys/fs/cgroup/lxc/{vmid}/memory.current',               # PVE 8 cgroup v2
+                        f'/sys/fs/cgroup/memory/lxc/{vmid}/memory.usage_in_bytes', # PVE 7 cgroup v1
                     ]
                     for cg_path in cg_paths:
                         try:
@@ -630,6 +634,36 @@ class StarheavenExporter:
                             if val > 0:
                                 mem_used = val
                                 break
+                        except Exception:
+                            pass
+
+                # ── CPU % from cgroup usage_usec rate (pvesh cpu=0 outside TTY).
+                # QEMU: /sys/fs/cgroup/qemu.slice/{vmid}.scope/cpu.stat
+                # LXC:  /sys/fs/cgroup/lxc/{vmid}/cpu.stat
+                if status == 'running':
+                    cg_cpu_paths = [
+                        f'/sys/fs/cgroup/qemu.slice/{vmid}.scope/cpu.stat',  # QEMU
+                        f'/sys/fs/cgroup/lxc/{vmid}/cpu.stat',               # LXC
+                    ]
+                    for cg_path in cg_cpu_paths:
+                        try:
+                            with open(cg_path) as _f:
+                                content = _f.read()
+                            usage_usec = int(next(
+                                l.split()[1] for l in content.splitlines()
+                                if l.startswith('usage_usec')
+                            ))
+                            now = time.time()
+                            prev = self._cpu_prev.get(vmid)
+                            if prev is not None:
+                                prev_usec, prev_ts = prev
+                                delta_usec = usage_usec - prev_usec
+                                delta_secs = now - prev_ts
+                                if delta_secs > 0 and delta_usec >= 0:
+                                    cpu_pct = (delta_usec / (delta_secs * num_cpus * 1_000_000)) * 100.0
+                                    cpu_pct = min(cpu_pct, 100.0 * num_cpus)
+                            self._cpu_prev[vmid] = (usage_usec, now)
+                            break
                         except Exception:
                             pass
 
