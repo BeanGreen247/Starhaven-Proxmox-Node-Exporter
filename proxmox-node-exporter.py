@@ -557,7 +557,7 @@ class StarheavenExporter:
         self.collection_duration.labels(collector='smart').set(time.time() - _t0)
         self.collection_success.labels(collector='smart').set(1)
 
-    @timed(timeout=15)
+    @timed(timeout=60)
     def collect_vms(self):
         """Collect QEMU VM and LXC container metrics via pvesh JSON API."""
         if not (self.features['qemu_vms'] or self.features['lxc_containers']):
@@ -594,12 +594,44 @@ class StarheavenExporter:
                 self.vm_status.labels(vmid=vmid, name=name, type=vm_type).set(
                     1 if status == 'running' else 0)
 
-                # pvesh list already includes cpu/mem/uptime for running VMs
-                cpu_ratio = float(vm.get('cpu', 0) or 0)   # 0.0–1.0
-                cpu_pct   = cpu_ratio * 100.0
-                mem_used  = int(vm.get('mem',    0) or 0)
-                mem_max   = int(vm.get('maxmem', 0) or 0)
-                uptime    = int(vm.get('uptime', 0) or 0)
+                # Use /status/current per-VM for accurate cpu (list endpoint
+                # returns instantaneous 0 for idle VMs; status/current gives
+                # the proper Proxmox-averaged value)
+                mem_max = int(vm.get('maxmem', 0) or 0)
+                cpu_pct = mem_used = uptime = 0
+                try:
+                    stat = subprocess.run(
+                        ['pvesh', 'get',
+                         f'/nodes/{node}/{api_path}/{vmid}/status/current',
+                         '--output-format', 'json'],
+                        capture_output=True, text=True, timeout=5)
+                    if stat.returncode == 0:
+                        s = json.loads(stat.stdout)
+                        cpu_pct  = float(s.get('cpu',    0) or 0) * 100.0
+                        mem_used = int(s.get('mem',      0) or 0)
+                        mem_max  = int(s.get('maxmem', mem_max) or mem_max)
+                        uptime   = int(s.get('uptime',   0) or 0)
+                except Exception:
+                    pass
+
+                # LXC containers track memory via cgroups on the host — pvesh
+                # may return 0 for mem when the JSON is read outside a TTY context.
+                # Always read cgroup memory directly for LXC; it is the
+                # authoritative value (same as what the Proxmox web UI shows).
+                if vm_type == 'lxc' and status == 'running':
+                    cg_paths = [
+                        f'/sys/fs/cgroup/lxc/{vmid}/memory.current',          # PVE 8 cgroup v2
+                        f'/sys/fs/cgroup/memory/lxc/{vmid}/memory.usage_in_bytes',  # PVE 7 cgroup v1
+                    ]
+                    for cg_path in cg_paths:
+                        try:
+                            with open(cg_path) as _f:
+                                val = int(_f.read().strip())
+                            if val > 0:
+                                mem_used = val
+                                break
+                        except Exception:
+                            pass
 
                 self.vm_cpu.labels(vmid=vmid, name=name, type=vm_type).set(cpu_pct)
                 self.vm_uptime.labels(vmid=vmid, name=name, type=vm_type).set(uptime)
