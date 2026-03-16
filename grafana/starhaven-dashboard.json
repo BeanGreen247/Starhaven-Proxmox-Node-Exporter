@@ -2344,7 +2344,7 @@
           },
           "decimals": 2,
           "mappings": [],
-          "max": 1,
+          "max": 100,
           "min": 0,
           "thresholds": {
             "mode": "absolute",
@@ -2354,12 +2354,16 @@
                 "value": 0
               },
               {
+                "color": "orange",
+                "value": 70
+              },
+              {
                 "color": "red",
-                "value": 80
+                "value": 90
               }
             ]
           },
-          "unit": "percentunit"
+          "unit": "percent"
         },
         "overrides": []
       },
@@ -3351,5 +3355,5 @@
   "timezone": "",
   "title": "Proxmox - Starhaven Homelab",
   "uid": "starhaven-pve-2026",
-  "version": 88
+  "version": 89
 }

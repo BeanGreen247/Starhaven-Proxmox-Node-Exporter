@@ -659,9 +659,11 @@ class StarheavenExporter:
                                 prev_usec, prev_ts = prev
                                 delta_usec = usage_usec - prev_usec
                                 delta_secs = now - prev_ts
-                                if delta_secs > 0 and delta_usec >= 0:
+                                # Require at least 5s between samples to avoid
+                                # startup transient spikes on first delta.
+                                if delta_secs >= 5 and delta_usec >= 0:
                                     cpu_pct = (delta_usec / (delta_secs * num_cpus * 1_000_000)) * 100.0
-                                    cpu_pct = min(cpu_pct, 100.0 * num_cpus)
+                                    cpu_pct = min(cpu_pct, 100.0)  # cap at 100% (Proxmox scale)
                             self._cpu_prev[vmid] = (usage_usec, now)
                             break
                         except Exception:
