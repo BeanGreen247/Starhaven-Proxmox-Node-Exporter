@@ -2594,21 +2594,11 @@
                 "uid": "af3392sviamtcf"
               },
               "editorMode": "code",
-              "expr": "pve_qemu_memory_bytes{instance=\"$instance\"}",
-              "legendFormat": "QEMU {{name}}",
+              "instant": false,
               "range": true,
-              "refId": "qemu_mem"
-            },
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "af3392sviamtcf"
-              },
-              "editorMode": "code",
-              "expr": "pve_lxc_memory_bytes{instance=\"$instance\"}",
-              "legendFormat": "LXC {{name}}",
-              "range": true,
-              "refId": "lxc_mem"
+              "expr": "pve_vm_memory_used_bytes{instance=\"192.168.0.222:9101\"}",
+              "legendFormat": "{{name}} ({{type}})",
+              "refId": "mem"
             }
           ],
           "title": "Per-VM RAM Usage",
@@ -2710,10 +2700,11 @@
                 "uid": "af3392sviamtcf"
               },
               "editorMode": "code",
-              "expr": "rate(pve_qemu_net_rx_bytes_total{instance=\"$instance\"}[5m])",
-              "legendFormat": "QEMU {{name}} RX",
+              "instant": false,
               "range": true,
-              "refId": "qemu_rx"
+              "expr": "rate(node_network_receive_bytes_total{instance=\"192.168.0.222:9100\",device=~\"tap[0-9]+i[0-9]+\"}[5m])",
+              "legendFormat": "RX tapID={{device}}",
+              "refId": "rx"
             },
             {
               "datasource": {
@@ -2721,32 +2712,11 @@
                 "uid": "af3392sviamtcf"
               },
               "editorMode": "code",
-              "expr": "rate(pve_qemu_net_tx_bytes_total{instance=\"$instance\"}[5m])",
-              "legendFormat": "QEMU {{name}} TX",
+              "instant": false,
               "range": true,
-              "refId": "qemu_tx"
-            },
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "af3392sviamtcf"
-              },
-              "editorMode": "code",
-              "expr": "rate(pve_lxc_net_rx_bytes_total{instance=\"$instance\"}[5m])",
-              "legendFormat": "LXC {{name}} RX",
-              "range": true,
-              "refId": "lxc_rx"
-            },
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "af3392sviamtcf"
-              },
-              "editorMode": "code",
-              "expr": "rate(pve_lxc_net_tx_bytes_total{instance=\"$instance\"}[5m])",
-              "legendFormat": "LXC {{name}} TX",
-              "range": true,
-              "refId": "lxc_tx"
+              "expr": "rate(node_network_transmit_bytes_total{instance=\"192.168.0.222:9100\",device=~\"tap[0-9]+i[0-9]+\"}[5m])",
+              "legendFormat": "TX tapID={{device}}",
+              "refId": "tx"
             }
           ],
           "title": "Per-VM Network I/O",
@@ -3456,5 +3426,5 @@
   "timezone": "",
   "title": "Proxmox - Starhaven Homelab",
   "uid": "starhaven-pve-2026",
-  "version": 78
+  "version": 79
 }
