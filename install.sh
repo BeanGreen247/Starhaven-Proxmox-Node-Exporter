@@ -5,7 +5,7 @@
 # Python deps are resolved via apt first, falling back to venv (PEP 668 safe).
 #
 # Usage:
-#   curl -fsSL https://raw.githubusercontent.com/BeanGreen247/starhaven-homelab/main/install.sh | bash
+#   curl -fsSL https://raw.githubusercontent.com/BeanGreen247/Starhaven-Proxmox-Node-Exporter/main/install.sh | bash
 #
 # Or with a custom GITHUB_USER:
 #   GITHUB_USER=myuser bash install.sh
@@ -14,7 +14,7 @@ set -euo pipefail
 
 # -------- CONFIG --------
 GITHUB_USER="BeanGreen247"
-GITHUB_REPO="starhaven-homelab"
+GITHUB_REPO="Starhaven-Proxmox-Node-Exporter"
 GITHUB_BRANCH="main"
 
 INSTALL_DIR="/opt/proxmox-exporter"
