@@ -2698,6 +2698,29 @@
                   },
                   "refId": "uptime"
                 }
+              },
+              {
+                "kind": "PanelQuery",
+                "spec": {
+                  "hidden": false,
+                  "query": {
+                    "datasource": {
+                      "name": "af3392sviamtcf"
+                    },
+                    "group": "prometheus",
+                    "kind": "DataQuery",
+                    "spec": {
+                      "editorMode": "code",
+                      "expr": "sum by (name) (label_replace(apt_upgrades_pending * on(instance) group_left(nodename) node_uname_info, \"name\", \"$1\", \"nodename\", \"(.*)\"))",
+                      "format": "table",
+                      "instant": true,
+                      "legendFormat": "",
+                      "range": false
+                    },
+                    "version": "v0"
+                  },
+                  "refId": "updates"
+                }
               }
             ],
             "queryOptions": {},
@@ -2707,7 +2730,7 @@
                 "kind": "Transformation",
                 "spec": {
                   "options": {
-                    "byField": "vmid",
+                    "byField": "name",
                     "mode": "outer"
                   }
                 }
@@ -2723,39 +2746,46 @@
                       "Time 3": true,
                       "Time 4": true,
                       "Time 5": true,
+                      "Time 6": true,
                       "__name__ 1": true,
                       "__name__ 2": true,
                       "__name__ 3": true,
                       "__name__ 4": true,
                       "__name__ 5": true,
+                      "__name__ 6": true,
                       "instance 1": true,
                       "instance 2": true,
                       "instance 3": true,
                       "instance 4": true,
                       "instance 5": true,
+                      "instance 6": true,
                       "job 1": true,
                       "job 2": true,
                       "job 3": true,
                       "job 4": true,
                       "job 5": true,
-                      "name 2": true,
-                      "name 3": true,
-                      "name 4": true,
-                      "name 5": true,
+                      "job 6": true,
                       "type 2": true,
                       "type 3": true,
                       "type 4": true,
-                      "type 5": true
+                      "type 5": true,
+                      "type 6": true,
+                      "vmid 2": true,
+                      "vmid 3": true,
+                      "vmid 4": true,
+                      "vmid 5": true,
+                      "vmid 6": true
                     },
                     "renameByName": {
                       "Value #cpu": "CPU %",
                       "Value #mem_total": "RAM Total",
                       "Value #mem_used": "RAM Used",
                       "Value #status": "Status",
+                      "Value #updates": "Updates",
                       "Value #uptime": "Uptime",
-                      "name 1": "Name",
+                      "name": "Name",
                       "type 1": "Type",
-                      "vmid": "VMID"
+                      "vmid 1": "VMID"
                     }
                   }
                 }
@@ -2964,6 +2994,64 @@
                       "value": 140
                     }
                   ]
+                },
+                {
+                  "matcher": {
+                    "id": "byName",
+                    "options": "Updates"
+                  },
+                  "properties": [
+                    {
+                      "id": "custom.width",
+                      "value": 90
+                    },
+                    {
+                      "id": "thresholds",
+                      "value": {
+                        "mode": "absolute",
+                        "steps": [
+                          {
+                            "color": "green",
+                            "value": 0
+                          },
+                          {
+                            "color": "yellow",
+                            "value": 1
+                          },
+                          {
+                            "color": "orange",
+                            "value": 10
+                          },
+                          {
+                            "color": "red",
+                            "value": 25
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "id": "mappings",
+                      "value": [
+                        {
+                          "options": {
+                            "0": {
+                              "color": "green",
+                              "index": 0,
+                              "text": "Up to date"
+                            }
+                          },
+                          "type": "value"
+                        }
+                      ]
+                    },
+                    {
+                      "id": "custom.cellOptions",
+                      "value": {
+                        "mode": "basic",
+                        "type": "color-background"
+                      }
+                    }
+                  ]
                 }
               ]
             },
@@ -2973,8 +3061,8 @@
               "showHeader": true,
               "sortBy": [
                 {
-                  "desc": false,
-                  "displayName": "Name"
+                  "desc": true,
+                  "displayName": "Updates"
                 }
               ]
             }
