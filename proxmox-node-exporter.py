@@ -18,7 +18,8 @@ Metrics exposed (port 9101):
   Sensors:    node_hwmon_temp_celsius, node_hwmon_fan_rpm (coretemp + dell_smm_hwmon)
   SMART:      node_disk_smart_* (sda, sdb, nvme0n1)
   PVE:        pve_vm_status, pve_vm_cpu/memory, pve_vm_count, pve_version_info
-  Disks:      pve_disk_volsize_bytes, pve_disk_used_bytes (per VM/LXC ZFS zvol/subvol)
+  Disks:      pve_disk_volsize_bytes, pve_disk_used_bytes, pve_disk_refreservation_bytes,
+              pve_disk_thin_provisioned (per VM/LXC ZFS zvol/subvol)
   System:     node_load*, node_procs_*, node_systemd_unit_state
 
 Environment variables:
@@ -268,9 +269,13 @@ class StarheavenExporter:
             self.vm_uptime = Gauge('pve_vm_uptime_seconds',       'VM uptime',      ['vmid', 'name', 'type'], registry=r)
         # ── PVE Virtual Disk allocation (ZFS zvols + subvols)
         if self.features['zfs']:
-            self.disk_volsize = Gauge('pve_disk_volsize_bytes', 'ZFS virtual disk allocated size',
+            self.disk_volsize = Gauge('pve_disk_volsize_bytes', 'ZFS virtual disk provisioned (nominal) size',
                                       ['vmid', 'disk', 'pool', 'type'], registry=r)
             self.disk_used    = Gauge('pve_disk_used_bytes',    'ZFS virtual disk physically used',
+                                      ['vmid', 'disk', 'pool', 'type'], registry=r)
+            self.disk_refres  = Gauge('pve_disk_refreservation_bytes', 'ZFS zvol refreservation (0 = thin provisioned)',
+                                      ['vmid', 'disk', 'pool', 'type'], registry=r)
+            self.disk_thin    = Gauge('pve_disk_thin_provisioned', 'ZFS zvol provisioning mode (1=thin, 0=thick)',
                                       ['vmid', 'disk', 'pool', 'type'], registry=r)
 
     # ──────────────────────────────────────────
@@ -688,10 +693,10 @@ class StarheavenExporter:
             return
         _t0 = time.time()
         # zfs list -t volume,filesystem: covers zvols (QEMU) and datasets (LXC)
-        # Columns: name  volsize  used  refer
+        # Columns: name  volsize  used  refer  refreservation
         result = subprocess.run(
             ['zfs', 'list', '-t', 'volume,filesystem', '-Hp',
-             '-o', 'name,volsize,used,refer'],
+             '-o', 'name,volsize,used,refer,refreservation'],
             capture_output=True, text=True, timeout=8
         )
         if result.returncode != 0:
@@ -702,9 +707,9 @@ class StarheavenExporter:
         lxc_re  = re.compile(r'^([^/]+)/subvol-([0-9]+)-(disk-[0-9]+)$')
         for line in result.stdout.strip().splitlines():
             cols = line.split('\t')
-            if len(cols) < 4:
+            if len(cols) < 5:
                 continue
-            name, volsize_s, used_s, refer_s = cols
+            name, volsize_s, used_s, refer_s, refres_s = cols
             for pattern, vm_type in [(qemu_re, 'qemu'), (lxc_re, 'lxc')]:
                 m = pattern.match(name)
                 if not m:
@@ -714,9 +719,18 @@ class StarheavenExporter:
                     # volsize is '-' for filesystems (LXC); fall back to refer for used space
                     volsize = int(volsize_s) if volsize_s not in ('-', 'none', '') else 0
                     used    = int(used_s)    if used_s    not in ('-', 'none', '') else 0
+                    # refreservation is 'none'/'-'/0 for thin-provisioned zvols and subvols (no reservation)
+                    refres  = int(refres_s)  if refres_s  not in ('-', 'none', '') else 0
                     if volsize > 0:
                         self.disk_volsize.labels(vmid=vmid, disk=disk, pool=pool, type=vm_type).set(volsize)
                     self.disk_used.labels(vmid=vmid, disk=disk, pool=pool, type=vm_type).set(used)
+                    # Only zvols (QEMU) carry a refreservation; LXC subvols have none and are always thin
+                    if vm_type == 'qemu':
+                        self.disk_refres.labels(vmid=vmid, disk=disk, pool=pool, type=vm_type).set(refres)
+                        self.disk_thin.labels(vmid=vmid, disk=disk, pool=pool, type=vm_type).set(0 if refres > 0 else 1)
+                    else:
+                        self.disk_refres.labels(vmid=vmid, disk=disk, pool=pool, type=vm_type).set(0)
+                        self.disk_thin.labels(vmid=vmid, disk=disk, pool=pool, type=vm_type).set(1)
                 except (ValueError, TypeError):
                     pass
         self.collection_duration.labels(collector='vm_disks').set(time.time() - _t0)
