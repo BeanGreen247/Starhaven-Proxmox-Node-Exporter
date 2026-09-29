@@ -4532,7 +4532,7 @@
                           "kind": "ElementReference",
                           "name": "panel-58"
                         },
-                        "height": 4,
+                        "height": 6,
                         "width": 24,
                         "x": 0,
                         "y": 0
@@ -4546,9 +4546,22 @@
                           "name": "panel-59"
                         },
                         "height": 10,
-                        "width": 24,
+                        "width": 12,
                         "x": 0,
-                        "y": 4
+                        "y": 6
+                      }
+                    },
+                    {
+                      "kind": "GridLayoutItem",
+                      "spec": {
+                        "element": {
+                          "kind": "ElementReference",
+                          "name": "panel-45"
+                        },
+                        "height": 10,
+                        "width": 12,
+                        "x": 12,
+                        "y": 6
                       }
                     },
                     {
@@ -4561,7 +4574,7 @@
                         "height": 9,
                         "width": 12,
                         "x": 0,
-                        "y": 14
+                        "y": 16
                       }
                     },
                     {
@@ -4574,20 +4587,7 @@
                         "height": 9,
                         "width": 12,
                         "x": 12,
-                        "y": 14
-                      }
-                    },
-                    {
-                      "kind": "GridLayoutItem",
-                      "spec": {
-                        "element": {
-                          "kind": "ElementReference",
-                          "name": "panel-45"
-                        },
-                        "height": 9,
-                        "width": 24,
-                        "x": 0,
-                        "y": 23
+                        "y": 16
                       }
                     }
                   ]
