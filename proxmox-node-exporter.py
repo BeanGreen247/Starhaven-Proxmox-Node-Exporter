@@ -481,7 +481,10 @@ class StarheavenExporter:
                     for line in f:
                         parts = line.split()
                         if len(parts) == 3:
-                            arc[parts[0]] = int(parts[2])
+                            try:
+                                arc[parts[0]] = int(parts[2])
+                            except ValueError:
+                                continue  # header row ("name type data") or malformed line
                 if 'size' in arc:
                     self.zfs_arc_size.set(arc['size'])
                 if 'c' in arc:
