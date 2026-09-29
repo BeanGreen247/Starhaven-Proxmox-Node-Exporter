@@ -4532,12 +4532,25 @@
                           "kind": "ElementReference",
                           "name": "panel-58"
                         },
-                        "height": 6,
+                        "height": 14,
                         "width": 24,
                         "x": 0,
                         "y": 0
                       }
-                    },
+                    }
+                  ]
+                }
+              },
+              "title": "Storage"
+            }
+          },
+          {
+            "kind": "TabsLayoutTab",
+            "spec": {
+              "layout": {
+                "kind": "GridLayout",
+                "spec": {
+                  "items": [
                     {
                       "kind": "GridLayoutItem",
                       "spec": {
@@ -4548,7 +4561,7 @@
                         "height": 10,
                         "width": 12,
                         "x": 0,
-                        "y": 6
+                        "y": 0
                       }
                     },
                     {
@@ -4561,7 +4574,7 @@
                         "height": 10,
                         "width": 12,
                         "x": 12,
-                        "y": 6
+                        "y": 0
                       }
                     },
                     {
@@ -4574,7 +4587,7 @@
                         "height": 9,
                         "width": 12,
                         "x": 0,
-                        "y": 16
+                        "y": 10
                       }
                     },
                     {
@@ -4587,7 +4600,7 @@
                         "height": 9,
                         "width": 12,
                         "x": 12,
-                        "y": 16
+                        "y": 10
                       }
                     }
                   ]
